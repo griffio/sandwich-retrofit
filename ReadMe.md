@@ -1,10 +1,11 @@
 # Basic Setup
 
-Example Retrofit API with Moshi Json
+Example Retrofit API with Moshi Json for Kotlin consumer
 
-[Sandwich](https://github.com/skydoves/sandwich) adapts the Retrofit network response into Kotlin
+The library [Sandwich](https://github.com/skydoves/sandwich) adapts the Retrofit network response into a Kotlin
+combinator
 
-Optionally with suspend coroutine
+Optionally with suspend coroutine support
 
 ```
 ./gradlew run
