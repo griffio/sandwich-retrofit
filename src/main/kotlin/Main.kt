@@ -1,9 +1,7 @@
 package griffio
 
-import com.skydoves.sandwich.ApiResponse
+import com.skydoves.sandwich.*
 import com.skydoves.sandwich.adapters.ApiResponseCallAdapterFactory
-import com.skydoves.sandwich.onException
-import com.skydoves.sandwich.onSuccess
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.Json
 import com.squareup.moshi.Moshi
@@ -58,11 +56,13 @@ val service: GitHubService = retrofit.create(GitHubService::class.java)
 
 suspend fun main() {
 
-    val repos = service.listRepos("octocat")
+    val octocat = service.listRepos("octocat")
+    // handle 200 ApiResponse
+    octocat.onSuccess { println(data.joinToString("\n")) }
 
-    // handle ApiResponse
-    repos.onSuccess { println(data.joinToString("\n")) }
-    repos.onException { println(exception) }
+    val bogus = service.listRepos("octocat?")
+    // handle 404 ApiResponse
+    bogus.onError { println(message()) }
 
     // okHttp non-daemon thread pool needs to be stopped
     http.dispatcher.executorService.shutdown()
