@@ -7,6 +7,8 @@ combinator
 
 Optionally with suspend coroutine support
 
+Also see https://github.com/slackhq/EitherNet for another Retrofit response model for Kotlin
+
 ```
 ./gradlew run
 ```
