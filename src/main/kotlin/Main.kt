@@ -28,6 +28,11 @@ data class Repo(
     @Json(name = "created_at") val createdAt: LocalDateTime,
 )
 
+data class ErrorMsg(
+    @Json(name = "message") val message: String,
+    @Json(name = "documentation_url") val url: String,
+)
+
 class LocalDateAdapter(private val formatter: DateTimeFormatter) {
     @ToJson
     fun toJson(dateTime: LocalDateTime?) =
@@ -55,6 +60,13 @@ val retrofit: Retrofit = Retrofit.Builder()
 
 val service: GitHubService = retrofit.create() // retrofit KotlinExtensions
 
+// sandwich model mapper for error responses
+val errorMapper = ApiErrorModelMapper { apiErrorResponse ->
+    val converter = retrofit.responseBodyConverter<ErrorMsg>(ErrorMsg::class.java, arrayOfNulls(0))
+    val errorBody = apiErrorResponse.errorBody ?: error("no error body")
+    converter.convert(errorBody) ?: error("failed to convert error body")
+}
+
 suspend fun main() {
 
     val octocat = service.listRepos("octocat")
@@ -63,7 +75,9 @@ suspend fun main() {
 
     val bogus = service.listRepos("octocat?")
     // handle 404 ApiResponse
-    bogus.onError { println(message()) }
+    bogus.onError {
+        println(map(errorMapper))
+    }
 
     // okHttp non-daemon thread pool needs to be stopped
     http.dispatcher.executorService.shutdown()
