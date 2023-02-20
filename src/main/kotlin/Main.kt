@@ -11,6 +11,7 @@ import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.create
 import retrofit2.http.GET
 import retrofit2.http.Path
 import java.time.LocalDateTime
@@ -52,7 +53,7 @@ val retrofit: Retrofit = Retrofit.Builder()
     .addConverterFactory(MoshiConverterFactory.create(moshi))
     .build()
 
-val service: GitHubService = retrofit.create(GitHubService::class.java)
+val service: GitHubService = retrofit.create() // retrofit KotlinExtensions
 
 suspend fun main() {
 
