@@ -60,11 +60,19 @@ val retrofit: Retrofit = Retrofit.Builder()
 
 val service: GitHubService = retrofit.create() // retrofit KotlinExtensions
 
+// example extension method for retrofit see sandwich
+// https://github.com/skydoves/sandwich/blob/main/sandwich-serialization/src/main/kotlin/com/skydoves/sandwich/serialization/SerializationExtensions.kt
+inline fun <reified T> ApiResponse<T>.deserializeErrorBody(): T? {
+    return if (this is ApiResponse.Failure.Error<T>) {
+        val converter = retrofit.responseBodyConverter<T>(T::class.java, arrayOfNulls(0))
+        val errorBody = errorBody ?: error("no error body")
+        converter.convert(errorBody) ?: error("failed to convert error body")
+    } else null
+}
+
 // sandwich model mapper for error responses
 val errorMapper = ApiErrorModelMapper { apiErrorResponse ->
-    val converter = retrofit.responseBodyConverter<ErrorMsg>(ErrorMsg::class.java, arrayOfNulls(0))
-    val errorBody = apiErrorResponse.errorBody ?: error("no error body")
-    converter.convert(errorBody) ?: error("failed to convert error body")
+    apiErrorResponse.deserializeErrorBody()
 }
 
 suspend fun main() {
