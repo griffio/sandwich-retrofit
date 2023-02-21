@@ -22,7 +22,7 @@ Repo(name=linguist, url=https://api.github.com/repos/octocat/linguist, createdAt
 Repo(name=octocat.github.io, url=https://api.github.com/repos/octocat/octocat.github.io, createdAt=2014-03-18T20:54:39)
 Repo(name=Spoon-Knife, url=https://api.github.com/repos/octocat/Spoon-Knife, createdAt=2011-01-27T19:30:43)
 Repo(name=test-repo1, url=https://api.github.com/repos/octocat/test-repo1, createdAt=2016-04-14T21:29:25)
-{"message":"Not Found","documentation_url":"https://docs.github.com/rest/reference/repos#list-repositories-for-a-user"}
+ErrorMsg(message=Not Found, url=https://docs.github.com/rest/reference/repos#list-repositories-for-a-user)
 ```
 
 ### Square Libraries
